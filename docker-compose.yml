@@ -1,0 +1,116 @@
+# Definisi semua service yang akan dijalankan
+services:
+  # === DATABASE SERVICE ===
+  # MySQL database untuk menyimpan data aplikasi
+  db:
+    # Menggunakan MySQL versi 8
+    image: mysql:8
+    
+    # Nama container
+    container_name: fundamental-db
+    
+    # Restart policy: container akan restart otomatis jika crash
+    restart: unless-stopped
+    
+    # Environment variables untuk konfigurasi MySQL
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword     # Password untuk user root
+      MYSQL_DATABASE: fundamental_docker    # Nama database yang akan dibuat
+      MYSQL_USER: dbuser                    # User biasa (selain root)
+      MYSQL_PASSWORD: dbpassword            # Password untuk user biasa
+    
+    # Port mapping: port_host:port_container
+    # Port 3307 di host akan terhubung ke port 3306 di container
+    # (Menggunakan 3307 karena 3306 mungkin sudah digunakan MySQL lokal)
+    ports:
+      - "3307:3306"
+    
+    # Volume untuk persistent data
+    # Data MySQL akan disimpan bahkan setelah container dihapus
+    volumes:
+      - mysql_data:/var/lib/mysql
+    
+    # Healthcheck untuk memastikan MySQL sudah siap
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    
+    # Network yang digunakan
+    networks:
+      - app-network
+
+  # === BACKEND SERVICE ===
+  # Express.js server
+  server:
+    # Build dari Dockerfile di folder server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    
+    container_name: fundamental-server
+    restart: unless-stopped
+    
+    # Port mapping untuk server (3001 di host → 3000 di container)
+    ports:
+      - "3001:3000"
+    
+    # Environment variables untuk aplikasi server
+    environment:
+      NODE_ENV: production
+      DB_HOST: db                           # Hostname = nama service database
+      DB_PORT: 3306
+      DB_NAME: fundamental_docker
+      DB_USER: dbuser
+      DB_PASS: dbpassword                   # Sesuai dengan database.js
+      DB_DIALECT: mysql
+    
+    # Dependency: server akan menunggu db selesai start dan healthy
+    depends_on:
+      db:
+        condition: service_healthy
+    
+    # Volume untuk development (hot reload)
+    # Uncomment jika ingin development mode
+    # volumes:
+    #   - ./server:/app
+    #   - /app/node_modules
+    
+    networks:
+      - app-network
+
+  # === FRONTEND SERVICE ===
+  # React client dengan Nginx
+  client:
+    # Build dari Dockerfile di folder client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    
+    container_name: fundamental-client
+    restart: unless-stopped
+    
+    # Port mapping untuk client
+    # Akses aplikasi di http://localhost:8080
+    ports:
+      - "8080:80"
+    
+    # Client tergantung pada server
+    depends_on:
+      - server
+    
+    networks:
+      - app-network
+
+# === NETWORKS ===
+# Network untuk komunikasi antar container
+networks:
+  app-network:
+    driver: bridge
+
+# === VOLUMES ===
+# Volume untuk persistent data
+volumes:
+  mysql_data:
+    driver: local

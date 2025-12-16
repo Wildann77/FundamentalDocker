@@ -1,0 +1,227 @@
+# ========================================
+# .gitignore untuk Full Stack Docker Project
+# React + Express + MySQL + Docker
+# ========================================
+
+# === Node.js ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Dependency directories
+jspm_packages/
+
+# Package manager lock files (optional, tergantung preference)
+# Uncomment jika ingin ignore lock files
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+bun.lock
+
+# === Environment Variables ===
+# PENTING: Jangan commit file .env yang berisi credentials!
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# Tapi keep .env.example untuk reference
+!.env.example
+
+# === Build Outputs ===
+# Client (React/Vite)
+client/dist/
+client/build/
+client/.vite/
+client/.cache/
+
+# Server
+server/dist/
+server/build/
+
+# General build artifacts
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# === Docker ===
+# Docker volumes (jika ada yang di-mount ke project folder)
+volumes/*
+data/*
+
+# Docker compose override (untuk local dev settings)
+docker-compose.override.yml
+
+# Docker build cache (jika ada)
+.dockercache/
+
+# === Database ===
+# SQLite (jika digunakan)
+*.sqlite
+*.sqlite3
+*.db
+
+# MySQL dumps
+*.sql
+*.dump
+
+# Database data folders (jika di-mount ke project)
+mysql_data/
+postgres_data/
+
+# === IDE & Editor ===
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.history/
+*.vsix
+
+# JetBrains (WebStorm, IntelliJ, etc)
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*.swn
+*~
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# === OS Files ===
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+.directory
+.Trash-*
+
+# === Logs ===
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Runtime logs
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# === Testing ===
+coverage/
+*.lcov
+.nyc_output/
+.grunt/
+.lock-wscript
+
+# Jest
+jest-results.json
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+
+# === TypeScript ===
+*.tsbuildinfo
+.tsbuildinfo
+
+# === Temporary Files ===
+*.tmp
+*.temp
+*.cache
+.cache/
+.temp/
+tmp/
+temp/
+
+# === Security & Credentials ===
+# SSH keys
+*.pem
+*.key
+!*.pub
+
+# Certificates
+*.cert
+*.crt
+
+# === Misc ===
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Compressed files (optional)
+# *.zip
+# *.tar
+# *.gz
+
+# Documentation builds (jika ada auto-generated docs)
+docs/_build/
+docs/.doctrees/
+
+# === Project Specific ===
+# Add your project-specific ignores here
+
+# Example: Jika ada folder uploads
+# uploads/*
+# !uploads/.gitkeep
+
+# Example: Jika ada generated files
+# generated/
+
+# ========================================
+# CATATAN PENTING:
+# 
+# 1. File .env HARUS di-ignore untuk keamanan
+# 2. Keep .env.example untuk dokumentasi
+# 3. node_modules HARUS di-ignore (besar & dapat di-install ulang)
+# 4. Docker volumes sebaiknya di-ignore
+# 5. Build artifacts di-ignore karena bisa di-rebuild
+# 
+# Yang HARUS di-commit:
+# - Source code (client/src, server/)
+# - Dockerfile & docker-compose.yml
+# - .env.example (bukan .env!)
+# - package.json & package-lock.json
+# - Dokumentasi (.md files)
+# ========================================
