@@ -33,6 +33,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const fetchUsers = async () => {
     try {
       const response = await fetch('/api/users');
+      if (!response.ok) throw new Error('Failed to fetch users');
       const data = await response.json();
       setUsers(data);
     } catch (error) {
@@ -49,10 +50,15 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         },
         body: JSON.stringify(user),
       });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to add user');
+      }
       const newUser = await response.json();
       setUsers(prev => [...prev, newUser]);
     } catch (error) {
       console.error('Error adding user:', error);
+      alert('Error adding user: ' + (error as Error).message);
     }
   };
 
