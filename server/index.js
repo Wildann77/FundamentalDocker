@@ -9,6 +9,10 @@ app.use(express.json());
 
 app.use("/users", userRoutes);
 
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
 sequelize.sync({ alter: true })
   .then(() => console.log("Database connected"))
   .catch(err => console.error(err));

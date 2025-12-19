@@ -2,6 +2,28 @@
 
 ## Diagram Arsitektur
 
+Cara Menggunakan:
+Mode Development (Default)
+Gunakan perintah standar ini untuk pengembangan sehari-hari dengan fitur hot-reload:
+
+bash
+docker compose up --build
+Client: http://localhost:8080 (Vite Dev Server)
+Server: http://localhost:3001
+Mode Production
+Gunakan perintah ini untuk mensimulasikan lingkungan produksi (image lebih kecil, lebih aman):
+
+bash
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build
+Client: http://localhost:8080 (Dilayani oleh Nginx)
+Server: http://localhost:3001 (Berjalan sebagai user non-root)
+
+Untuk mengaktifkan fitur watch ini, jalankan perintah berikut:
+
+bash
+docker compose up --watch
+
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                         Docker Host                              │
